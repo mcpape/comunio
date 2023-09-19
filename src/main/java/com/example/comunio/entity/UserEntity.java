@@ -16,18 +16,27 @@ import java.util.List;
 public class UserEntity extends BaseEntity {
 
     private String name;
+    private Long points;
+    private Long balance;
+    private Long marketValue;
 
     @ElementCollection
     @Column(name = "alias")
     @CollectionTable(name = "users_alias", joinColumns = @JoinColumn(name = "owner_id"))
     private List<String> alias = new ArrayList<>();
 
-    private Long points;
-    private Long balance;
-
     @ElementCollection
     @Column(name = "bonus")
     @CollectionTable(name = "users_bonus", joinColumns = @JoinColumn(name = "owner_id"))
     private List<Long> bonus = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExtraBonusEntity> extraBonusEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromUserEntity", orphanRemoval = true)
+    private List<TransferEntity> fromTransferEntity = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUserEntity", orphanRemoval = true)
+    private List<TransferEntity> toTransferEntities = new ArrayList<>();
 
 }

@@ -1,6 +1,9 @@
 package com.example.comunio.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,7 +21,7 @@ public class TransferEntity extends BaseEntity {
     private String transferTime;
     private Long price;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
     @JoinColumn(name = "player_entity_id")
     private PlayerEntity playerEntity;
 
