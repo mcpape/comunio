@@ -13,13 +13,18 @@ public class TableContainerService {
 
     private final TableContainerEntityRepository tableContainerEntityRepository;
 
-    public List<TableContainerEntity> createTableContainerEntities(List<String> scrapedResult) {
+    public List<TableContainerEntity> removeAllAndResaveTableContainerEntities(List<String> scrapedResult) {
+        removeAllTableContainerEntities();
         List<TableContainerEntity> entities = scrapedResult.stream()
                 .map(result -> TableContainerEntity.builder()
                         .tableData(result)
                         .build())
                 .toList();
         return tableContainerEntityRepository.saveAll(entities);
+    }
+
+    public void removeAllTableContainerEntities() {
+        tableContainerEntityRepository.deleteAll();
     }
 
 }

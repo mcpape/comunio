@@ -5,7 +5,7 @@ import lombok.Value;
 @Value
 public class BalanceResult {
 
-    String user;
+    String username;
     String balance;
     String creditLimit;
     String value;

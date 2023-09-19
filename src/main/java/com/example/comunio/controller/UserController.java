@@ -2,6 +2,7 @@ package com.example.comunio.controller;
 
 import com.example.comunio.domain.calculator.BalanceCalculator;
 import com.example.comunio.domain.calculator.BalanceResult;
+import com.example.comunio.domain.printer.BalanceResultPrinter;
 import com.example.comunio.model.CreateUserRequest;
 import com.example.comunio.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class UserController {
 
     private final UserService userService;
     private final BalanceCalculator balanceCalculator;
+    private final BalanceResultPrinter balanceResultPrinter;
 
     @PostMapping
     public void createUsers(@RequestBody List<CreateUserRequest> createUserRequests) {
@@ -24,7 +26,9 @@ public class UserController {
 
     @GetMapping
     public List<BalanceResult> getBalance() {
-        return balanceCalculator.calculate();
+        List<BalanceResult> calculate = balanceCalculator.calculate();
+        balanceResultPrinter.print(calculate);
+        return calculate;
     }
 
 }
