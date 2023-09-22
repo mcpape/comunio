@@ -1,4 +1,4 @@
-package com.example.comunio.model;
+package com.example.comunio.model.request;
 
 import lombok.Value;
 

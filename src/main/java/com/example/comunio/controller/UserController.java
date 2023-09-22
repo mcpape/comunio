@@ -1,11 +1,11 @@
 package com.example.comunio.controller;
 
-import com.example.comunio.domain.calculator.BalanceCalculator;
-import com.example.comunio.domain.calculator.BalanceResult;
-import com.example.comunio.domain.printer.BalanceResultPrinter;
-import com.example.comunio.model.CreateUserRequest;
+import com.example.comunio.model.dto.UserDto;
+import com.example.comunio.model.request.CreateUserRequest;
+import com.example.comunio.model.request.UpdateUserRequest;
 import com.example.comunio.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +16,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final BalanceCalculator balanceCalculator;
-    private final BalanceResultPrinter balanceResultPrinter;
 
     @PostMapping
     public void createUsers(@RequestBody List<CreateUserRequest> createUserRequests) {
@@ -25,10 +23,15 @@ public class UserController {
     }
 
     @GetMapping
-    public List<BalanceResult> getBalance() {
-        List<BalanceResult> calculate = balanceCalculator.calculate();
-        balanceResultPrinter.print(calculate);
-        return calculate;
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.findUserDtos());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest) {
+        return userService.updateUser(id, updateUserRequest)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

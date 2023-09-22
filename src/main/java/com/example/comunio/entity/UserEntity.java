@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserEntity extends BaseEntity {
 
+    @Column(unique = true)
     private String name;
     private Long points;
     private Long balance;
@@ -38,5 +39,13 @@ public class UserEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "toUserEntity", orphanRemoval = true)
     private List<TransferEntity> toTransferEntities = new ArrayList<>();
+
+    public void addBonus(List<Long> bonus) {
+        this.bonus.addAll(bonus);
+    }
+
+    public void addAlias(List<String> alias) {
+        this.alias.addAll(alias);
+    }
 
 }
