@@ -1,13 +1,15 @@
 package com.example.comunio.domain.postscraping.transfer;
 
+import com.example.comunio.util.DateParser;
 import org.springframework.stereotype.Component;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Component
@@ -25,7 +27,7 @@ public class TransferPreparer {
         for (String newsBlock : scrapedResult) {
             String[] singleNewsLines = newsBlock.split("\n");
             for (String singleNewsLine : singleNewsLines) {
-                transferDate = parseTransferDate(singleNewsLine)
+                transferDate = DateParser.parseToDate(singleNewsLine)
                         .orElse(transferDate);
 
                 List<String> newsLineSingleWords = Arrays.asList(singleNewsLine.split(" "));
@@ -66,7 +68,6 @@ public class TransferPreparer {
         for (int i = fromIndex + 1; i <= toIndex - 1; i++) {
             fromPlayerName = fromPlayerName.concat(newsLineSingleWords.get(i));
         }
-
         return fromPlayerName;
     }
 
@@ -86,30 +87,6 @@ public class TransferPreparer {
                 .filter(s -> timePattern.matcher(s).matches())
                 .findFirst()
                 .orElse(DEFAULT_TRANSFER_TIME);
-    }
-
-    private Optional<LocalDate> parseTransferDate(String newsBlock) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy");
-        LocalDate localDateNow = LocalDate.now();
-        LocalDate localDateYesterday = localDateNow.minusDays(1);
-
-        Pattern datePattern = Pattern.compile("\\d{2}.\\d{2}.\\d{2}");
-
-        Predicate<String> todayDatePredicate = x -> x.equals("Heute");
-        Predicate<String> yesterdayDatePredicate = x -> x.equals("Gestern");
-
-        LocalDate date;
-        if (todayDatePredicate.test(newsBlock)) {
-            date = localDateNow;
-        } else if (yesterdayDatePredicate.test(newsBlock)) {
-            date = localDateYesterday;
-        } else if (datePattern.matcher(newsBlock).matches()) {
-            date = LocalDate.parse(newsBlock, dateFormatter);
-        } else {
-            return Optional.empty();
-        }
-
-        return Optional.of(date);
     }
 
     private Long parseNumber(String price) {

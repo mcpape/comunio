@@ -4,21 +4,17 @@ import com.example.comunio.entity.ExtraBonusEntity;
 import com.example.comunio.entity.TransferEntity;
 import com.example.comunio.entity.UserEntity;
 import com.example.comunio.service.UserService;
+import com.example.comunio.util.LongValueFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
 public class BalanceCalculator {
-
-    private static final String COMPUTER = "Computer";
-    private static final NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMAN);
 
     @Value("${comnuio.money.per.point}")
     private String amountPerPoint;
@@ -26,14 +22,10 @@ public class BalanceCalculator {
     private final UserService userService;
 
     public List<BalanceResult> calculate() {
-        List<UserEntity> users = userService.findUsers();
+        List<UserEntity> users = userService.findUsersWithoutComputer();
 
         List<BalanceResult> results = new ArrayList<>();
         for (UserEntity user : users) {
-            if (user.getName().equals(COMPUTER)) {
-                continue;
-            }
-
             Long initAmount = user.getBalance();
             Long pointsAmount = calcAmountPerPoints(user);
             Long extraBonus = calcExtraBonus(user);
@@ -44,7 +36,11 @@ public class BalanceCalculator {
             Long marketValue = user.getMarketValue();
             Long creditLimit = (marketValue / 4) + totalBalance;
             Long value = marketValue + totalBalance;
-            results.add(new BalanceResult(user.getName(), nf.format(totalBalance), nf.format(creditLimit), nf.format(value)));
+            BalanceResult balanceResult = new BalanceResult(user.getName(),
+                    LongValueFormatter.format(totalBalance),
+                    LongValueFormatter.format(creditLimit),
+                    LongValueFormatter.format(value));
+            results.add(balanceResult);
         }
 
         return results;

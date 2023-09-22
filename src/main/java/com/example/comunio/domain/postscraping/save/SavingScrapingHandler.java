@@ -21,7 +21,7 @@ public class SavingScrapingHandler implements PostScrapingHandler {
 
     @Override
     public void handle(ScrapingResult scrapingResult) {
-        log.info("Starting with SavingScrapingHandler calc.");
+        log.info("Starting with SavingScrapingHandler");
         newsContainerService.saveNewsContainerEntitiesIfNotExists(scrapingResult.getNewsData());
         tableContainerService.removeAllAndResaveTableContainerEntities(scrapingResult.getTableData());
     }

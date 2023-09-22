@@ -18,6 +18,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private static final String COMPUTER = "Computer";
 
     @Value("${comunio.start.money}")
     private String startMoneyAmount;
@@ -36,6 +37,12 @@ public class UserService {
                 )
                 .toList();
         userEntityRepository.saveAll(players);
+    }
+
+    public List<UserEntity> findUsersWithoutComputer() {
+        return findUsers().stream()
+                .filter(user -> !user.getName().equals(COMPUTER))
+                .toList();
     }
 
     public List<UserEntity> findUsers() {

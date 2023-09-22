@@ -19,7 +19,7 @@ public class PointsHandler implements PostScrapingHandler {
 
     @Override
     public void handle(ScrapingResult scrapingResult) {
-        log.info("Starting with PointsHandler calc.");
+        log.info("Starting with PointsHandler");
         List<String> tableData = scrapingResult.getTableData();
         List<TableUserInformation> tableUserInformation = pointsPreparer.prepare(tableData);
         userService.updateUserInformation(tableUserInformation);

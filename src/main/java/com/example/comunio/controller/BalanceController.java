@@ -18,7 +18,7 @@ public class BalanceController {
     private final BalanceCalculator balanceCalculator;
     private final BalanceResultPrinter balanceResultPrinter;
 
-    @GetMapping("/balance")
+    @GetMapping
     public List<BalanceResult> getUserWithBalance() {
         List<BalanceResult> calculate = balanceCalculator.calculate();
         balanceResultPrinter.print(calculate);

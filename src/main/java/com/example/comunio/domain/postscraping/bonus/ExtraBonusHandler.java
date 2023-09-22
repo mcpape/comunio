@@ -24,7 +24,7 @@ public class ExtraBonusHandler implements PostScrapingHandler {
 
     @Override
     public void handle(ScrapingResult scrapingResult) {
-        log.info("Starting with ExtraBonusHandler calc.");
+        log.info("Starting with ExtraBonusHandler");
         List<String> newsData = scrapingResult.getNewsData();
         List<UserExtraBonus> userExtraBonuses = extraBonusPreparer.prepare(newsData);
         List<ExtraBonusEntity> extraBonusEntities = tableUserInformationToEntityConverter.convert(userExtraBonuses);

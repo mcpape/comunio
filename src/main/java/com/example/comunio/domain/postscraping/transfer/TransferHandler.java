@@ -24,7 +24,7 @@ public class TransferHandler implements PostScrapingHandler {
 
     @Override
     public void handle(ScrapingResult scrapingResult) {
-        log.info("Starting with TransferHandler calc.");
+        log.info("Starting with TransferHandler");
         List<String> newsData = scrapingResult.getNewsData();
         List<PreparedTransfer> preparedNewsData = transferPreparer.prepare(newsData);
         log.info("Prepared news size " + preparedNewsData.size());
