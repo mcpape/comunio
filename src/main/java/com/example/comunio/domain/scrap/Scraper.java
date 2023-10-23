@@ -4,10 +4,12 @@ import com.example.comunio.domain.ScrapingResult;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -105,10 +107,12 @@ public class Scraper {
 
     private void loadMoreElements() {
         try {
-            webDriverWait.until(d -> d.findElement(By.xpath("//*[@id=\"btn_load_more_news\"]"))).click();
+            WebElement loadButtonElement = webDriver.findElement(By.xpath("//*[@id=\"btn_load_more_news\"]"));
+            ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", loadButtonElement);
+            webDriverWait.until(ExpectedConditions.elementToBeClickable(loadButtonElement)).click();
             Thread.sleep(2000);
-            webDriverWait.until(d -> d.findElement(By.xpath(
-                    "html/body/grid/level[1]/div/div/level/rail[2]/lore/div[2]/div[2]/div[2]/div/div/div/div/div/div[1]/div/div[2]")));
+            webDriverWait.until(ExpectedConditions.elementToBeClickable((By.xpath(
+                    "html/body/grid/level[1]/div/div/level/rail[2]/lore/div[2]/div[2]/div[2]/div/div/div/div/div/div[1]/div/div[2]"))));
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
