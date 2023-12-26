@@ -26,10 +26,8 @@ public class UserEntity extends BaseEntity {
     @CollectionTable(name = "users_alias", joinColumns = @JoinColumn(name = "owner_id"))
     private List<String> alias = new ArrayList<>();
 
-    @ElementCollection
-    @Column(name = "bonus")
-    @CollectionTable(name = "users_bonus", joinColumns = @JoinColumn(name = "owner_id"))
-    private List<Long> bonus = new ArrayList<>();
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CustomBonusEntity> customBonusEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExtraBonusEntity> extraBonusEntities = new ArrayList<>();
@@ -40,12 +38,12 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "toUserEntity", orphanRemoval = true)
     private List<TransferEntity> toTransferEntities = new ArrayList<>();
 
-    public void addBonus(List<Long> bonus) {
-        this.bonus.addAll(bonus);
+    public void addBonus(CustomBonusEntity customBonusEntity) {
+        this.customBonusEntities.add(customBonusEntity);
     }
 
-    public void addAlias(List<String> alias) {
-        this.alias.addAll(alias);
+    public void addAlias(String alias) {
+        this.alias.add(alias);
     }
 
 }

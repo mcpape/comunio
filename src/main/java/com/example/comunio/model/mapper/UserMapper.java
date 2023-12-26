@@ -1,5 +1,6 @@
 package com.example.comunio.model.mapper;
 
+import com.example.comunio.entity.CustomBonusEntity;
 import com.example.comunio.entity.UserEntity;
 import com.example.comunio.model.dto.UserDto;
 import org.apache.commons.lang3.NotImplementedException;
@@ -15,7 +16,10 @@ public class UserMapper implements Mapper<UserEntity, UserDto> {
                 .alias(userEntity.getAlias())
                 .marketValue(userEntity.getMarketValue())
                 .points(userEntity.getPoints())
-                .bonus(userEntity.getBonus())
+                .bonus(userEntity.getCustomBonusEntities()
+                        .stream()
+                        .map(CustomBonusEntity::getAmount)
+                        .toList())
                 .build();
     }
 

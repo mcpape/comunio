@@ -10,5 +10,6 @@ public class UserExtraBonus {
     LocalDate bonusTime;
     String userName;
     Long bonus;
+    String reason;
 
 }

@@ -9,13 +9,13 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "extra_bonus")
+@Table(name = "custom_bonus")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExtraBonusEntity extends BaseEntity {
+public class CustomBonusEntity extends BaseEntity {
 
     private Long amount;
     private LocalDate bonusTime;

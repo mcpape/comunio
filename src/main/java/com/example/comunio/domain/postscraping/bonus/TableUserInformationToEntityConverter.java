@@ -19,7 +19,7 @@ public class TableUserInformationToEntityConverter {
         List<ExtraBonusEntity> results = new ArrayList<>();
         for (UserExtraBonus userExtraBonus : userExtraBonuses) {
             UserEntity userEntity = userService.findByNameOrAlias(userExtraBonus.getUserName());
-            results.add(new ExtraBonusEntity(userExtraBonus.getBonus(), userExtraBonus.getBonusTime(), userEntity));
+            results.add(new ExtraBonusEntity(userExtraBonus.getBonus(), userExtraBonus.getBonusTime(), userExtraBonus.getReason(), userEntity));
         }
         return results;
     }

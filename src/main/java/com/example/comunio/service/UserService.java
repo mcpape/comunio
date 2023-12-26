@@ -1,6 +1,7 @@
 package com.example.comunio.service;
 
 import com.example.comunio.domain.postscraping.points.TableUserInformation;
+import com.example.comunio.entity.CustomBonusEntity;
 import com.example.comunio.entity.UserEntity;
 import com.example.comunio.model.dto.UserDto;
 import com.example.comunio.model.mapper.UserMapper;
@@ -31,7 +32,7 @@ public class UserService {
                 .map(request -> UserEntity.builder()
                         .name(request.getName())
                         .alias(request.getAliases())
-                        .bonus(request.getBonus())
+                        .customBonusEntities(List.of())
                         .balance(Long.valueOf(startMoneyAmount))
                         .build()
                 )
@@ -74,7 +75,11 @@ public class UserService {
         return userEntityRepository.findById(id)
                 .map(user -> {
                     user.addAlias(updateUserRequest.getAlias());
-                    user.addBonus(updateUserRequest.getBonus());
+                    CustomBonusEntity customBonusEntity = new CustomBonusEntity();
+                    customBonusEntity.setReason(updateUserRequest.getReason());
+                    customBonusEntity.setAmount(updateUserRequest.getBonus());
+                    customBonusEntity.setUserEntity(user);
+                    user.addBonus(customBonusEntity);
                     return user;
                 })
                 .map(userEntityRepository::save)

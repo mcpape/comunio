@@ -14,8 +14,10 @@ import java.util.List;
 public class ExtraBonusPreparer {
 
     private static final String EXTRA_BONUS = "Gutschrift:";
+    private static final String FINE = "Disziplinarstrafe:";
     private static final String START_PLAYER = "wurden";
     private static final String END_PLAYER = "vom";
+    private static final String REASON = "Begründung:";
 
     public List<UserExtraBonus> prepare(List<String> scrapedResult) {
         List<UserExtraBonus> results = new ArrayList<>();
@@ -27,19 +29,35 @@ public class ExtraBonusPreparer {
                         .orElse(bonusDate);
 
                 List<String> newsLineSingleWords = Arrays.asList(singleNewsLine.split(" "));
-                if (newsLineSingleWords.stream().noneMatch(s -> s.equals(EXTRA_BONUS))) {
+                if (newsLineSingleWords.stream().noneMatch(s -> s.equals(EXTRA_BONUS) || s.equals(FINE))) {
                     continue;
                 }
 
-                int indexGutschrift = newsLineSingleWords.indexOf(EXTRA_BONUS) + 1;
+                int indexGutschrift;
+                if (newsLineSingleWords.contains(EXTRA_BONUS)) {
+                    indexGutschrift = newsLineSingleWords.indexOf(EXTRA_BONUS) + 1;
+                } else {
+                    indexGutschrift = newsLineSingleWords.indexOf(FINE) + 1;
+                }
+
                 Long amount = extractBonusAmount(newsLineSingleWords, indexGutschrift);
+                int indexReason = newsLineSingleWords.indexOf(REASON) + 1;
+                String reason = extractReason(newsLineSingleWords, indexReason);
+                if (newsLineSingleWords.contains(FINE)) {
+                    amount *= -1;
+                }
+
                 String playerName = extractPlayername(newsLineSingleWords);
 
-                results.add(new UserExtraBonus(bonusDate, playerName, amount));
+                results.add(new UserExtraBonus(bonusDate, playerName, amount, reason));
             }
         }
 
         return results;
+    }
+
+    private String extractReason(List<String> newsLineSingleWords, int indexReason) {
+        return newsLineSingleWords.get(indexReason);
     }
 
     private Long extractBonusAmount(List<String> newsLineSingleWords, int indexGutschrift) {

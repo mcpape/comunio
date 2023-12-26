@@ -1,5 +1,6 @@
 package com.example.comunio.domain.calculator;
 
+import com.example.comunio.entity.CustomBonusEntity;
 import com.example.comunio.entity.ExtraBonusEntity;
 import com.example.comunio.entity.TransferEntity;
 import com.example.comunio.entity.UserEntity;
@@ -72,8 +73,9 @@ public class BalanceCalculator {
     }
 
     private Long calcBonus(UserEntity userEntity) {
-        return userEntity.getBonus()
+        return userEntity.getCustomBonusEntities()
                 .stream()
+                .map(CustomBonusEntity::getAmount)
                 .reduce(0L, Long::sum);
     }
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,13 @@ public class NewsContainerService {
     @Value("${comnuio.league.start.date}")
     private String leagueStartDate;
     private final NewsContainerEntityRepository newsContainerEntityRepository;
+
+    public List<String> getAllData() {
+        return newsContainerEntityRepository.findAll()
+                .stream()
+                .map(NewsContainerEntity::getNews)
+                .collect(Collectors.toList());
+    }
 
     /**
      * @return A date in string representation. It is the last time since scraping minus 3 day.
